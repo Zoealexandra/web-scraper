@@ -1,0 +1,12 @@
+{
+  "name": "web-scraper",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/Kauri-2018/web-scraper.git",
+  "license": "MIT",
+  "dependencies": {
+    "request": "^2.85.0",
+    "cheerio": "^1.0.0-rc.2",
+    "express": "^4.16.3"
+  }
+}
