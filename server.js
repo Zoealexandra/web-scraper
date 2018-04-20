@@ -4,43 +4,16 @@ const request = require('request')
 const cheerio = require('cheerio')
 const app = express()
 
-/* app.get('/scrape', function (req, res) {
-  const url = 'http://www.imdb.com/title/tt1229340/'
-
-  request(url, function (error, response, html) {
-    if (!error) {
-      const $ = cheerio.load(html)
-
-      let title = ''
-      let release = ''
-      let rating = ''
-      const json = {title: '', release: '', rating: ''}
-
-      // We'll use the unique header class as a starting point.
-      $('.header').filter(function () {
-        // Let's store the data we filter into a constiable so we can easily see what's going on.
-        let data = $(this)
-
-        // In examining the DOM we notice that the title rests within the first child element of the header tag.
-        // Utilizing jQuery we can easily navigate and get the text by writing the following code:
-        title = data.children().first().text()
-
-        // Once we have our title, we'll store it to the our json object.
-        json.title = title
-      })
-    }
-  })
-}) */
-
 app.get('/scrape', function (req, res) {
   let url = 'http://www.imdb.com/title/tt1229340/'
 
   request(url, function (error, response, html) {
+    const json = {title: '', release: '', rating: ''}
+
     if (!error) {
       let $ = cheerio.load(html)
 
       let title, release, rating
-      let json = {title: '', release: '', rating: ''}
 
       $('.header').filter(function () {
         let data = $(this)
