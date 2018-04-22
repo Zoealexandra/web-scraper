@@ -5,8 +5,10 @@
   "repository": "https://github.com/Kauri-2018/web-scraper.git",
   "license": "MIT",
   "dependencies": {
-    "request": "^2.85.0",
     "cheerio": "^1.0.0-rc.2",
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "jsonframe": "^0.0.2",
+    "jsonframe-cheerio": "^3.0.1",
+    "request": "^2.85.0"
   }
 }
