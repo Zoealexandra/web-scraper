@@ -5,7 +5,7 @@ const cheerio = require('cheerio')
 const app = express()
 
 app.get('/scrape', function (req, res) {
-  let url = 'https://www.spcaauckland.org.nz/adopt/small-animals/'
+  let url = 'https://www.spcaauckland.org.nz/adopt/small-animals/-cloudy-and-storm/'
 
   request(url, function (error, response, html) {
     const json = {name: ''}
@@ -19,9 +19,8 @@ app.get('/scrape', function (req, res) {
 
       $('.page-title.col-sm-12.clearfix').filter(function () {
         let data = $(this)
-        animalName = data.first().text()
+        animalName = data.first().children().text()
         // eslint-disable-next-line no-console
-        console.log('goose')
         // release = data.children().children().first().text()
 
         json.name = animalName
