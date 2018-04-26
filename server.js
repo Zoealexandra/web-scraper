@@ -1,55 +1,68 @@
 const express = require('express')
-const app = express()
+const fs = require('fs')
+const request = require('request')
+const cheerio = require('cheerio')
+const server = express()
 
-app.get('/scrape', function (req, res) {
+server.get('/scrape', function (req, res) {
   let url = 'https://www.spcaauckland.org.nz/adopt/small-animals/-cloudy-and-storm/'
 
   request(url, function (error, response, html) {
-    const json = {name: ''}
+    const json = {name: '', animalId: '', age: '', colour: '', breed: '', story: '', bio: ''}
 
     if (!error) {
       let $ = cheerio.load(html)
 
       let animalName = ''
-      // let release = ''
-      // let rating = ''
+      let animalId = ''
+      let age = ''
+      let colour = ''
+      let breed = ''
+      let story = ''
+      let bio = ''
 
       $('.page-title.col-sm-12.clearfix').filter(function () {
         let data = $(this)
-        animalName = data.first().children().text()
-        // eslint-disable-next-line no-console
-        // release = data.children().children().first().text()
+        animalName = data.first().children().first().text()
+        animalId = data.first().children().first().next().text()
 
         json.name = animalName
-        // json.release = release
+        json.animalId = animalId
       })
 
-      // Since the rating is in a different section of the DOM, we'll have to write a new jQuery filter to extract this information.
-
-      /*       $('.ratingValue').filter(function () {
+      $('.product-attributes').filter(function () {
         let data = $(this)
+        age = data.children().children().first().children().last().text()
+        breed = data.children().children().first().next().children().last().text()
+        colour = data.children().children().first().next().next().children().last().text()
 
-        // The .star-box-giga-star class was exactly where we wanted it to be.
-        // To get the rating, we can simply just get the .text(), no need to traverse the DOM any further
+        json.age = age
+        json.breed = breed
+        json.colour = colour
+      })
 
-        rating = data.children().text()
+      $('.product-description').filter(function () {
+        let data = $(this)
+        story = data.children().first().next().text()
+        bio = data.children().first().next().next().next().text() + (' ') + data.children().first().next().next().next().next().text()
 
-        json.rating = rating
-      }) */
+        json.story = story
+        json.bio = bio
+      })
     }
 
     fs.writeFile('spcaoutput.json', JSON.stringify(json, null, 4), function (err) {
       // eslint-disable-next-line no-console
-      return !err ? console.log('File successfully written! - Check your project directory for the output.json file') : null
+      return !err ? console.log('File successfully written! - Check your project directory for the outputted json file') : null
     })
 
-    // Finally, we'll just send out a message to the browser reminding you that this app does not have a UI.
+    // Message confirmed in browser to check your file - no UI
     res.send('Check your console!')
   })
 })
 
-app.listen('8080')
+server.listen('8080')
 // eslint-disable-next-line no-console
-console.log('Magic happens on port 8080')
+console.log('Server listening on port 8080')
 
-exports = module.exports = app
+exports = module.exports = server
